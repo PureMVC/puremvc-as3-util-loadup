@@ -1,0 +1,59 @@
+Migration from StartupManager v1.x to Loadup v2
+---------------------------------------------------
+Ensure you have read the release notes in version.txt; in particular,
+see the instructions regarding loaded and failed notifications.
+
+Name changes
+- Startup has changed to Loadup for the following classes:
+StartupMonitorProxy, StartupResourceProxy, StartupResourceLoadedCommand,
+StartupResourceFailedCommand; for example, we now have LoadupMonitorProxy
+- interface IStartupProxy is now ILoadupProxy
+- class StartupManager is now Loadup
+- package name 'startupmanager' is now 'loadup', for example, 
+'utilities.startupmanager.model' is now 'utilities.loadup.model'.
+- in LoadupMonitorProxy
+	- addResourceViaStartupProxy is now addResourceViaLoadupProxy
+	- addResourcesViaStartupProxy is now addResourcesViaLoadupProxy
+	- prefixIfAutoSRPName is now prefixIfAutoLRPName
+	- findSRProxyByAppProxyName is now findLRProxyByAppProxyName.
+
+Property jobId of StartupMonitorProxy
+- does not exist in LoadupMonitorProxy
+- instead of assigning a string to jobId, you could create a new instance 
+of LoadupMonitorProxy with a meaningful proxy name; notification type on 
+loaded and failed notifications is then required; one approach would be 
+to use the jobId as the proxy name
+- in mediators or commands, where the jobId was used as a notification 
+type descriminiator, now use the LoadupMonitorProxy proxy name instead
+- if finished with a previous instance of LoadupMonitorProxy, remember to 
+invoke cleanup on that instance.
+
+For users who have implemented their own IResourceList or have extended
+the ResourceList class
+- methods addResource and addResources have a changed signature, 
+to include an arg that references the monitor instance
+- existing usage that passes an IResourceList as
+the data arg to the monitor constructor must change to (null,data)
+since data is now the second optional arg, proxyName being the
+first
+- new method isToBeKeptOpen
+- property resourceList is dropped; it was previously deprecated, use
+method getResources instead.
+
+For users who have implemented their own IRetryParameters or have
+extended the RetryParameters class
+- new parameter expBackoff.
+
+For users of the asset loader feature
+- classes LoadAssetGroupCommand and LoadingInstructions have been
+dropped; it is recommended that users develop their own solution; see 
+the LoadupForAssets demo, version 2, for a sample solution; this is 
+the replacement for the StartupForAssets demo
+- in class AssetGroupProxy, protected var smMonitorJobId and public 
+function getSMMonitorJobId have been dropped, since jobId is no 
+longer supported (see above)
+- in mediators or commands, where the asset group proxy name was used 
+as a notification type descriminator, now use the LoadupMonitorProxy 
+proxy name instead, there being one monitor instance per asset group.
+
+----------------------------------------------------------------------

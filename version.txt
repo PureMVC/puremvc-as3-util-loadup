@@ -1,0 +1,109 @@
+PureMVC AS3 Utility - Loadup 
+Copyright (c) 2007-2009, collaborative, as follows
+2007 Daniele Ugoletti, Joel Caballero
+2008 Philip Sexton <philip.sexton@puremvc.org>
+2009 Philip Sexton <philip.sexton@puremvc.org>
+Your reuse is governed by the Creative Commons Attribution 3.0 License
+--------------------------------------------------------------------------
+Release Date: 11-Aug-2009
+    Platform: ActionScript 3 
+     Version: 2
+    Revision: 0
+       Minor: 0
+      Author: Philip Sexton <philip.sexton@puremvc.org>
+     License: Creative Commons Attribution 3.0 United States License
+--------------------------------------------------------------------------
+2.0 This version of the utility is called Loadup instead of StartupManager, 
+    to remove the inference that the utility is only relevant at application 
+    startup. Class names and some other names have changed accordingly, see
+    the separate migration instructions, migrationToV2.txt. Apart from the
+    name change, features that are new are set out below.
+
+    The last backward compatible version of the 1.x line is 1.6.1, and 
+    it will remain in the StartupManager_1_x branch of the repository 
+    in case bug fixes  to the 1.x line are required.
+    
+    LoadupMonitorProxy (monitor) constructor now takes proxyName as an 
+    arg (optional), thus enabling concurrent instances; for an example of
+    this, see the LoadupForAssets demo. Property jobId has 
+    been dropped - see migration instructions.
+    On notifications sent by Loadup, the type is the monitor proxyName.
+    On loaded and failed notifications sent by the client app, if 
+    the monitor proxyName is not the default name, the notification 
+    type MUST BE the monitor proxyName.
+    IResourceList methods addResource and addResources have a
+    changed signature, to include an arg that references the
+    monitor instance. Existing usage that passes an IResourceList as
+    the data arg to the monitor constructor must change to (null,data)
+    since data is now the second optional arg, proxyName being the
+    first. IResourceList has new method isToBeKeptOpen.
+    IRetryParameters has a new parameter, to switch on exponential
+    backoff logic when RetryPolicy applies the retry interval.
+
+    Existing users of the assetLoader facility, note the following:
+    - classes LoadAssetGroupCommand and LoadingInstructions have been
+    dropped; it is recommended that users develop their own solution; see 
+    the LoadupForAssets demo, version 2, for a sample solution; this is 
+    the replacement for the StartupForAssets demo; this demo also has new
+    functionality.
+
+    See the LoadupAsOrdered demo, version 2, this is the replacement for 
+    the StartupAsOrdered demo.
+    
+1.6.1 This release is backward compatible.
+      Method addResourceViaStartupProxy() of StartupMonitorProxy
+      now registers the new StartupResourceProxy objects.
+      For background, see 
+      http://forums.puremvc.org/index.php?topic=259.msg4604#msg4604
+1.6 This release is backward compatible.
+    Within asset loader feature, in AssetFactory class: support for
+    .css urls as asset type Text, plus defaulting to type Text,
+    hence reduced likelihood of 'unexpected url type' as an Error 
+    condition.
+    Within StartupMonitorProxy class: new cleanup method, to remove
+    StartupResourceProxy objects from proxy map; also, the reset
+    method now includes this cleanup of SRP objects. 
+1.5 This release is backward compatible.
+    Asset Loader feature; see API docs and StartupForAssets demo.
+    New class StartupManager has public consts, as an alternative to
+    StartupMonitorProxy.
+1.4 In general, increased exposure of state and behaviour, to facilitate
+    easier public access and easier adaptation by inheritance. In 
+    particular, a new jobId property - see below.
+    New features as follows. In StartupMonitorProxy: public access to 
+    sendProgressNotification() and allResourcesLoaded(); 
+    new addResourceViaStartupProxy() method; 
+    new getResourceViaStartupProxyName() method;
+    allow override of notification name for 'waiting for more resources';
+    new jobId property, included as type on all sent notifications.
+    In ResourceList: some vars changed from private to protected access; 
+    now responsible for progress percentage calculation;
+    new getResourceViaStartupProxyName() method.
+    In RetryPolicy: increased exposure of state vars; interface IRetryPolicy
+    has additional behaviour, to match that of RetryPolicy.
+    In RetryParameters: some vars changed from private to protected access.
+    This release is backward compatible.
+1.3 - New features: reset() method on StartupMonitorProxy; support for 
+      retry policy with automatic retries etc.; support for open-ended 
+      resource list. There are interfaces for retry policy and for 
+      resource list.
+      This release breaks backward compatibility with the previous release.
+      Migration is as follows, using the word monitor for the instance of 
+      StartupMonitorProxy
+      - replace monitor.defaultTimeout = nn, by 
+      monitor.defaultRetryPolicy = new RetryPolicy(new RetryParameters(0,0,nn))
+      - RetryPolicy and RetryParameters are in the model package
+      - review the API documentation to decide what to pass to 
+      RetryParameters
+      - replace monitor.retryLoadResources() by 
+      monitor.tryToCompleteLoadResources()
+      - remove LOAD_RESOURCES_REJECTED from notification interests and 
+      handling
+      - additional notifications are: RETRYING_LOAD_RESOURCE and 
+      WAITING_FOR_MORE_RESOURCES.
+      See the latest version of StartupAsOrdered demo for example of use.
+
+1.2 - Refactored source into src folder - CLH
+1.1 - Cater for timeout.  Provide better overall functionality.
+1.0 - Initial release. Works with  PureMVC 2.0 Extracted from the 
+      StartupAsOrdered demo.
