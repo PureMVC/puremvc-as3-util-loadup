@@ -11,7 +11,7 @@
 <project name="Build Loadup" default="flex-std-swc" basedir=".">
 	<description>Build the swc libraries for the Loadup Utility</description>
 
-	<!-- For these properties, set your own values -->
+	<!-- ========== For these properties, set your own values ========= -->
 	<property name="build.debug" value="false"/>
 	<property name="FLEX_HOME" location="/Developer/SDKs/flex_sdk_3.4"/>
 	<property name="puremvc.libs.dir" location="../../../../PureMVC/libs"/>
@@ -70,7 +70,7 @@
 	</target>
 	<target name="flex-mc-swc" description="Flex MultiCore Swc">
 		<compc debug="${build.debug}"
-			include-classes="$flex.multicore.classes}"
+			include-classes="${flex.multicore.classes}"
 			output="${output.dir}/Utility_AS3_Flex_MultiCore_Loadup_2_1.swc">
 			<source-path path-element="${basedir}/multicore"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/framework.swc" append="true"/>
@@ -88,7 +88,7 @@
 	</target>
 	<target name="flash-mc-swc" description="Flash MultiCore Swc">
 		<compc debug="${build.debug}"
-			include-classes="$flash.multicore.classes}"
+			include-classes="${flash.multicore.classes}"
 			output="${output.dir}/Utility_AS3_Flash_MultiCore_Loadup_2_1.swc">
 			<source-path path-element="${basedir}/multicore"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/framework.swc" append="true"/>
