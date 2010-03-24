@@ -68,6 +68,8 @@ package org.puremvc.as3.utilities.loadup
         public static const IMAGE_ASSET_TYPE :String = "luImageAssetType";
         public static const TEXT_ASSET_TYPE :String = "luTextAssetType";
         public static const SWF_ASSET_TYPE :String = "luSwfAssetType";
+        public static const AUDIO_ASSET_TYPE :String = "luAudioAssetType";
+        public static const VIDEO_ASSET_TYPE :String = "luVideoAssetType";
 
         /**
          *  See LoadupMonitorProxy class

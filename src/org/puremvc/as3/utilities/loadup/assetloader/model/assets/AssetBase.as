@@ -9,7 +9,7 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.assets
      *  Abstract class.
      *  It is expected that subclasses will implement IAsset or IAssetForFlex.
      *  <p>
-     *  See Loadup class for introduction to the Loadup utility Utility.</p>
+     *  See Loadup class for introduction to the Loadup Utility.</p>
      */
 	public class AssetBase 
 	{

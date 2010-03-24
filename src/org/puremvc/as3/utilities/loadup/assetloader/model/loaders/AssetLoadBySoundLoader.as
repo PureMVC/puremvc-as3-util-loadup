@@ -1,40 +1,50 @@
 /*
 	PureMVC Utility - Loadup
-	Copyright (c) 2008 Philip Sexton <philip.sexton@puremvc.org>
+	Copyright (c) 2010 Philip Sexton <philip.sexton@puremvc.org>
 	Your reuse is governed by the Creative Commons Attribution 3.0 License
+*/
+/*
+	Copyright (c) 2010 Matthias Lohscheidt
+	Your reuse is governed by the Creative Commons Attribution 3.0 License
+
+    Part originally from:
+    	PureMVC Utility - Loadup
+    	Copyright (c) 2009 Philip Sexton <philip.sexton@puremvc.org>
+    	Your reuse is governed by the Creative Commons Attribution 3.0 License
 */
 package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
 {
 	import flash.events.Event;
-	import flash.events.ProgressEvent;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
 	import flash.events.IEventDispatcher;
-	import flash.net.URLLoader;
-	import flash.system.LoaderContext;
+	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.media.Sound;
 	import flash.net.URLRequest;
+	import flash.media.SoundLoaderContext;
+	
+	import org.puremvc.as3.utilities.loadup.assetloader.interfaces.IAssetLoader;
+	import org.puremvc.as3.utilities.loadup.assetloader.model.AssetProxy;
 
-    import org.puremvc.as3.utilities.loadup.assetloader.interfaces.IAssetLoader;
-    import org.puremvc.as3.utilities.loadup.assetloader.model.AssetProxy;
-
-    /**
-     *  The URLLoader class is used to load the asset. By default, the dataFormat is text, since that is the 
-     *  URLLoader default. However, this class includes a dataFormat property so that the default can be
-     *  overriden by any of the formats supported by URLLoader, for example, by setting the format to binary.
-     */
-	public class AssetLoadByURLLoader implements IAssetLoader
+	public class AssetLoadBySoundLoader implements IAssetLoader
 	{
- 		protected const LOADER_CONTEXT_NOT_APPLICABLE_MSG :String =
- 		    "AssetLoadByURLLoader, get/set loaderContext(), not applicable.";
+ 		protected const LOADER_FORMAT_NOT_APPLICABLE_MSG :String =
+ 		    "AssetLoadBySoundLoader, get/set dataFormat(), not applicable.";
 
-        protected var assetProxy :AssetProxy;
-        protected var loader :URLLoader;
+        private var assetProxy :AssetProxy;
+        private var loader: Sound;
 
+        private var _loaderContext :SoundLoaderContext;
         private var _urlRequest :URLRequest = new URLRequest();
-        private var _dataFormat :String = null;
 
-		public function AssetLoadByURLLoader( respondTo :AssetProxy ) {
-		    this.assetProxy = respondTo;			
+		public function AssetLoadBySoundLoader( respondTo :AssetProxy ) {
+		    this.assetProxy = respondTo;
+		}
+		public function set loaderContext( context :* ) :void {
+		    this._loaderContext = context;
+		}
+		public function get loaderContext() :* {
+		    return this._loaderContext;
 		}
 		public function set urlRequest( request :URLRequest ) :void {
 		    this._urlRequest = request;
@@ -42,42 +52,35 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
 		public function get urlRequest() :URLRequest {
 		    return this._urlRequest;
 		}
-		public function set dataFormat( format :String ) :void {
-		    this._dataFormat = format;
-		}
-		public function get dataFormat() :String {
-		    return this._dataFormat;
-		}
 
         /**
          *  Present only to satisfy IAssetLoader interface.
          */
-		public function set loaderContext( context :* ) :void {
-		    throw new Error( LOADER_CONTEXT_NOT_APPLICABLE_MSG );
+		public function set dataFormat( format :String ) :void {
+		    throw new Error( LOADER_FORMAT_NOT_APPLICABLE_MSG );
 		}
         /**
          *  Present only to satisfy IAssetLoader interface.
          */
-		public function get loaderContext() :* {
-		    throw new Error( LOADER_CONTEXT_NOT_APPLICABLE_MSG );
+		public function get dataFormat() :String {
+		    throw new Error( LOADER_FORMAT_NOT_APPLICABLE_MSG );
 		}
 
         public function load( url :String ) :void {
-            loader = new URLLoader();
+            loader = new Sound();
             addListeners( loader );
             urlRequest.url = url;
-
-            // Override the default dataFormat, if a specific value has been set here.
-            if ( dataFormat )
-                loader.dataFormat = dataFormat;
-
             try {
-                loader.load( urlRequest );
+                loader.load( urlRequest, loaderContext );
             } catch ( e :SecurityError ) {
                 assetProxy.loadingSecurityError( "Error, id:" + e.errorID.toString() + ", msg:" + e.message );
             }
         }
 
+        /**
+         *  From experience, the SecurityErrorEvent is included,
+         *  even though the Sound API does not specify it as an applicable Event.
+         */
         protected function addListeners( dis :IEventDispatcher ) :void {
             dis.addEventListener( ProgressEvent.PROGRESS, progressHandler );
             dis.addEventListener( IOErrorEvent.IO_ERROR, ioErrorHandler );
@@ -88,7 +91,7 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
             assetProxy.loadingProgress( ev.bytesLoaded, ev.bytesTotal );
         }
         protected function completeHandler( ev :Event ) :void {
-            assetProxy.loadingComplete( loader.data );
+            assetProxy.loadingComplete( loader );
             removeListeners( loader );
         }
         protected function ioErrorHandler( ev :Event ) :void {

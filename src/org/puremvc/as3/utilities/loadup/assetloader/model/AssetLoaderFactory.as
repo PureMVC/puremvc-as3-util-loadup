@@ -6,7 +6,7 @@
 package org.puremvc.as3.utilities.loadup.assetloader.model
 {
     import flash.net.URLRequest;
-    import flash.system.LoaderContext;
+    //import flash.system.LoaderContext;
 
     import org.puremvc.as3.utilities.loadup.assetloader.interfaces.IAssetLoader;
     import org.puremvc.as3.utilities.loadup.assetloader.interfaces.IAssetLoaderFactory;
@@ -28,7 +28,7 @@ package org.puremvc.as3.utilities.loadup.assetloader.model
 		    var loader :IAssetLoader = new loaderClass( respondTo );
 
             // optional
-            var loaderContext :LoaderContext = assetTypeMap.getLoaderContext( assetType );
+            var loaderContext :* = assetTypeMap.getLoaderContext( assetType );
             if ( loaderContext )
                 loader.loaderContext = loaderContext;
 
@@ -36,6 +36,11 @@ package org.puremvc.as3.utilities.loadup.assetloader.model
             var urlRequest :URLRequest = assetTypeMap.getURLRequest( assetType );
             if ( urlRequest )
                 loader.urlRequest = urlRequest;
+
+            // optional
+            var dataFormat :String = assetTypeMap.getLoaderDataFormat( assetType );
+            if ( dataFormat )
+                loader.dataFormat = dataFormat;
 
             return loader;
 		}

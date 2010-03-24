@@ -19,6 +19,9 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
 
 	public class AssetLoadByLoader implements IAssetLoader
 	{
+ 		protected const LOADER_FORMAT_NOT_APPLICABLE_MSG :String =
+ 		    "AssetLoadByLoader, get/set dataFormat(), not applicable.";
+
         private var assetProxy :AssetProxy;
         private var loader :Loader;
 
@@ -28,10 +31,10 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
 		public function AssetLoadByLoader( respondTo :AssetProxy ) {
 		    this.assetProxy = respondTo;
 		}
-		public function set loaderContext( context :LoaderContext ) :void {
+		public function set loaderContext( context :* ) :void {
 		    this._loaderContext = context;
 		}
-		public function get loaderContext() :LoaderContext {
+		public function get loaderContext() :* {
 		    return this._loaderContext;
 		}
 		public function set urlRequest( request :URLRequest ) :void {
@@ -39,6 +42,19 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
 		}
 		public function get urlRequest() :URLRequest {
 		    return this._urlRequest;
+		}
+
+        /**
+         *  Present only to satisfy IAssetLoader interface.
+         */
+		public function set dataFormat( format :String ) :void {
+		    throw new Error( LOADER_FORMAT_NOT_APPLICABLE_MSG );
+		}
+        /**
+         *  Present only to satisfy IAssetLoader interface.
+         */
+		public function get dataFormat() :String {
+		    throw new Error( LOADER_FORMAT_NOT_APPLICABLE_MSG );
 		}
 
         public function load( url :String ) :void {
@@ -52,10 +68,6 @@ package org.puremvc.as3.utilities.loadup.assetloader.model.loaders
             }
         }
 
-        /**
-         *  From experience, it seems that the SecurityErrorEvent is required, when loading swfs at least, 
-         *  even though the Loader API does not specify it as an applicable Event.
-         */
         protected function addListeners( dis :IEventDispatcher ) :void {
             dis.addEventListener( ProgressEvent.PROGRESS, progressHandler );
             dis.addEventListener( IOErrorEvent.IO_ERROR, ioErrorHandler );

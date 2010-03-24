@@ -18,6 +18,8 @@ package org.puremvc.as3.utilities.loadup.assetloader.model
      *  <li>.jpg, .gif, .png => Image</li>
      *  <li>.txt, .xml, .css => Text</li>
      *  <li>.swf => Swf</li>
+     *  <li>.flv, .f4v => Video</li>
+     *  <li>.mp3 => Audio</li>
      *  <li>any other alphabetic ending, e.g. .abcde, => Text</li>
      *  <li>otherwise, e.g. no ending, => Error is thrown.</li></ul>
      *  <p>
@@ -54,6 +56,10 @@ package org.puremvc.as3.utilities.loadup.assetloader.model
 		    else if ( endsWithAnyOf( urllo, [".txt", ".xml", ".css"] ) ) return Loadup.TEXT_ASSET_TYPE;
 
 		    else if ( endsWithAnyOf( urllo, [".swf"] ) ) return Loadup.SWF_ASSET_TYPE;
+
+		    else if ( endsWithAnyOf( urllo, [".flv", ".f4v"] ) ) return Loadup.VIDEO_ASSET_TYPE;
+
+		    else if ( endsWithAnyOf( urllo, [".mp3"] ) ) return Loadup.AUDIO_ASSET_TYPE;
 
             // else default to Text for any other alphabetic ending
             else if ( urllo.match(/\.[a-z]+$/)) return Loadup.TEXT_ASSET_TYPE;

@@ -6,7 +6,7 @@
 
 package org.puremvc.as3.utilities.loadup.assetloader.interfaces
 {
-	import flash.system.LoaderContext;
+	//import flash.system.LoaderContext;
 	import flash.net.URLRequest;
 
 	public interface IAssetTypeMap {
@@ -15,9 +15,12 @@ package org.puremvc.as3.utilities.loadup.assetloader.interfaces
 
         function getAssetLoaderClass( assetType :String ) :Class;
 
-        function getLoaderContext( assetType :String ) :LoaderContext;
+        //function getLoaderContext( assetType :String ) :LoaderContext;
+        function getLoaderContext( assetType :String ) :*;
 
         function getURLRequest( assetType :String ) :URLRequest;
+
+        function getLoaderDataFormat( assetType :String ) :String;
 
 	}
 }

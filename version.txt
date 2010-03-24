@@ -1,18 +1,28 @@
 PureMVC AS3 Utility - Loadup 
-Copyright (c) 2007-2009, collaborative, as follows
+Copyright (c) 2007-2010, collaborative, as follows
 2007 Daniele Ugoletti, Joel Caballero
 2008 Philip Sexton <philip.sexton@puremvc.org>
 2009 Philip Sexton <philip.sexton@puremvc.org>
 Your reuse is governed by the Creative Commons Attribution 3.0 License
 --------------------------------------------------------------------------
-Release Date: 11-Aug-2009
+Release Date: 24-Mar-2010
     Platform: ActionScript 3 
      Version: 2
-    Revision: 0
+    Revision: 1
        Minor: 0
       Author: Philip Sexton <philip.sexton@puremvc.org>
      License: Creative Commons Attribution 3.0 United States License
 --------------------------------------------------------------------------
+2.1 Enhancements to asset loader feature
+    - new audio asset, based on Sound class, for mp3 files
+    - new video asset, for flv/f4v files
+    - all asset types now have a flash version and a flex version.
+    As a consequence of the flash support, in order to provide swcs that
+    exclude flex content, there are now 4 swcs instead of 2. A new ant 
+    script build.xml defines the 4 builds. The swcs have been renamed, to
+    express the flex/flash distinction. As regards source code changes, 
+    the existing asset classes that were flex-specfic have been renamed to
+    include "Flex" in the class name.
 2.0 This version of the utility is called Loadup instead of StartupManager, 
     to remove the inference that the utility is only relevant at application 
     startup. Class names and some other names have changed accordingly, see

@@ -23,8 +23,8 @@ package org.puremvc.as3.utilities.loadup.assetloader.model
      *  After loading is complete, this proxy remains as a repository of the IASSET object.</p>
      *  <p>
      *  It is intended that this proxy can act for a range of asset types, providing there is
-     *  a suitable loader.  As key to understanding the approach, see AssetTypeMap, AssetFactory 
-     *  and AssetLoaderFactory.</p>
+     *  a suitable loader.  As key to understanding the approach, see AssetTypeMapBase, 
+     *  FlexAssetTypeMap, AssetFactory and AssetLoaderFactory.</p>
      *  <p>
      *  The loader class, of type IAssetLoader, has a Delegate type role.  It works for this 
      *  AssetProxy class and reports back to it.</p>

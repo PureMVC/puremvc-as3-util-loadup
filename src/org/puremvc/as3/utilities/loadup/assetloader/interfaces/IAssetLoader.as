@@ -14,13 +14,19 @@ package org.puremvc.as3.utilities.loadup.assetloader.interfaces
      */
 	public interface IAssetLoader {
 
-		function set loaderContext( context :LoaderContext ) :void;
+		//function set loaderContext( context :LoaderContext ) :void;
+		function set loaderContext( context :* ) :void;
 
-		function get loaderContext() :LoaderContext;
+		//function get loaderContext() :LoaderContext;
+		function get loaderContext() :*;
 
 		function set urlRequest( request :URLRequest ) :void;
 
 		function get urlRequest() :URLRequest;
+
+		function set dataFormat( format :String ) :void;
+
+		function get dataFormat() :String;
 
 		function load( url :String ) :void;
 

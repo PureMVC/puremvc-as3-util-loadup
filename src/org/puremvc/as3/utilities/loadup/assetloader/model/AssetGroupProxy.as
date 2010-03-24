@@ -23,8 +23,8 @@ package org.puremvc.as3.utilities.loadup.assetloader.model
      *  After loading is complete, this proxy remains as a repository of the AssetProxy objects
      *  and hence of the assets themselves.</p>
      *  <p>
-     *  As key to understanding AssetGroupProxy and AssetProxy, first see AssetTypeMap, 
-     *  AssetFactory and AssetLoaderFactory.</p>
+     *  As key to understanding AssetGroupProxy and AssetProxy, first see AssetTypeMapBase, 
+     *  FlexAssetTypeMap, AssetFactory and AssetLoaderFactory.</p>
      *  <p>
      *  Loading progress reporting is managed here, being the progress of the group of assets. The
      *  approach adopted ignores the LU progress reporting.  The standard LU progress reporting is
